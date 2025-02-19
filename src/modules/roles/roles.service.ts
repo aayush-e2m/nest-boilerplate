@@ -1,26 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Roles } from './entities/role.entity';
+import { ROLES_STRING } from '@/shared/utils/string.utils';
 
 @Injectable()
 export class RolesService {
-  create(createRoleDto: CreateRoleDto) {
-    return 'This action adds a new role';
-  }
+  constructor(
+    @InjectRepository(Roles)
+    private readonly roleRepository: Repository<Roles>,
+  ) {}
 
-  findAll() {
-    return `This action returns all roles`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} role`;
-  }
-
-  update(id: number, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+  async getRoleById(id: string): Promise<Roles> {
+    const role = await this.roleRepository.findOneBy({ id });
+    if (!role) {
+      throw new BadRequestException(ROLES_STRING.ERROR.ROLE_NOT_FOUND);
+    }
+    return role;
   }
 }

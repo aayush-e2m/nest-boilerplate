@@ -15,9 +15,9 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty()
-  role: number;
+  roleId: string;
 
-  admin: number;
+  admin: boolean;
 
   facebook: string;
 
