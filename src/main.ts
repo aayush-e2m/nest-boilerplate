@@ -1,7 +1,7 @@
 import { AllExceptionsFilter } from '@common/filters/all-exceptions.filter';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { logger } from '@utils/logger';
+import { logger } from '@utils/logger.utils';
 import helmet from 'helmet';
 
 async function bootstrap() {

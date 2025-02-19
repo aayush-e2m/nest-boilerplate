@@ -4,8 +4,8 @@ import {
   ArgumentsHost,
   HttpException,
 } from '@nestjs/common';
-import { logger } from '@utils/logger';
-import { COMMON_ERROR_STRING } from '@utils/string';
+import { logger } from '@utils/logger.utils';
+import { COMMON_ERROR_STRING } from '@utils/string.utils';
 import { Response } from 'express';
 
 @Catch()
