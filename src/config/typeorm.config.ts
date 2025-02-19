@@ -13,5 +13,4 @@ export const typeOrmConfig = (
   migrations: ['src/migrations/*.js'],
   autoLoadEntities: true,
   synchronize: true,
-  logging: true,
 });
