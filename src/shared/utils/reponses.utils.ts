@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Data, Pagination } from '@type/response.t';
+import { Data, Pagination } from 'src/shared/types/response.t';
 import { Response } from 'express';
 
 export const successResponse = function (res: Response, msg: string) {

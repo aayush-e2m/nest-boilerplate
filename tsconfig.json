@@ -21,8 +21,8 @@
       "@modules/*": ["src/modules/*"],
       "@common/*": ["src/common/*"],
       "@config/*": ["src/config/*"],
-      "@type/*": ["src/types/*"],
-      "@utils/*": ["src/utils/*"],
+      "@type/*": ["src/shared/types/*"],
+      "@utils/*": ["src/shared/utils/*"],
       "@entities/*": ["src/entities/*"],
       "@services/*": ["src/services/*"]
     }
