@@ -2,6 +2,9 @@ export const USERS_STRING = {
   SUCCESS: {
     USER_CREATED: 'User created successfully',
   },
+  ERROR: {
+    USER_EXIST: 'User already exists',
+  },
 };
 
 export const ROLES_STRING = {
