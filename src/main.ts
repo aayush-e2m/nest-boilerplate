@@ -1,7 +1,8 @@
-import { AllExceptionsFilter } from 'src/shared/filters/all-exceptions.filter';
+import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
+import { logger } from '@utils/logger.utils';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { logger } from 'src/shared/utils/logger.utils';
 import helmet from 'helmet';
 
 async function bootstrap() {
@@ -10,6 +11,8 @@ async function bootstrap() {
   app.use(helmet());
   app.enableCors();
   app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalPipes(new ValidationPipe());
+
   await app.listen(process.env.PORT ?? 3000);
 
   logger.log(

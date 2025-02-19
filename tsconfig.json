@@ -18,9 +18,12 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@/*": ["src/*"],
+      "@shared/*": ["src/shared/*"],
       "@modules/*": ["src/modules/*"],
       "@common/*": ["src/common/*"],
       "@config/*": ["src/config/*"],
+      "@filters/*": ["src/shared/filters/*"],
       "@type/*": ["src/shared/types/*"],
       "@utils/*": ["src/shared/utils/*"],
       "@entities/*": ["src/entities/*"],
