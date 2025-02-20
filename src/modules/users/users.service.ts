@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -53,8 +57,18 @@ export class UsersService {
       email_verified_at: new Date(),
     };
 
-    //If role type is agency then create agency details
+    //[For Agency] If role type is agency then create agency details
     if (role.code === ROLES_TYPES.IS_AGENCY_OWNER_ROLE_CODE) {
+      //check if agency already exist
+      const isExistAgency = await this.agentDetailsRepository.findOneBy({
+        agency_name: createUserDto.agency_name,
+      });
+
+      if (isExistAgency) {
+        throw new ConflictException(USERS_STRING.ERROR.AGENCY_ALREADY_EXISTS);
+      }
+
+      //add agency details
       const agentdetails = this.agentDetailsRepository.create({
         agency_name: createUserDto.agency_name,
         country: createUserDto.country,
@@ -66,11 +80,32 @@ export class UsersService {
       userPayload.agency_detail = agentdetails;
     }
 
+    //[For Agency Member] If role type is agency memberx
+    if (role.code === ROLES_TYPES.IS_AGENCY_MEMBER_ROLE_CODE) {
+      //check if agency name is provided
+      if (!createUserDto.agencyId) {
+        throw new BadRequestException(USERS_STRING.ERROR.AGENCY_NAME_REQUIRED);
+      }
+
+      //check if agency already exists or not
+      const isExistAgency = await this.userRepository.findOneBy({
+        id: createUserDto.agencyId,
+        role: {
+          code: ROLES_TYPES.IS_AGENCY_OWNER_ROLE_CODE,
+        },
+      });
+
+      //if agency not exist then throw error
+      if (!isExistAgency) {
+        throw new ConflictException(USERS_STRING.ERROR.AGENCY_NOT_FOUND);
+      }
+    }
+
     //save and return user
     const user = this.userRepository.create(userPayload);
     await this.userRepository.insert(user);
 
-    successResponseWithData(
+    return successResponseWithData(
       res,
       USERS_STRING.SUCCESS.USER_CREATED,
       instanceToPlain(user),

@@ -3,7 +3,10 @@ export const USERS_STRING = {
     USER_CREATED: 'User created successfully',
   },
   ERROR: {
-    USER_EXIST: 'User already exists',
+    USER_EXIST: 'User with this email already exists',
+    AGENCY_ALREADY_EXISTS: 'Agency with this name already exists',
+    AGENCY_NOT_FOUND: 'Agency not found',
+    AGENCY_NAME_REQUIRED: 'Agency name is required',
   },
 };
 
