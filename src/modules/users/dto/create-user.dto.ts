@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { EnumGender } from '@/shared/types/roles.t';
+import { IsEmail, IsEnum, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -16,6 +17,9 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   roleId: string;
+
+  @IsEnum(EnumGender)
+  gender: string;
 
   admin: boolean;
 

@@ -101,6 +101,11 @@ export class UsersService {
       }
     }
 
+    //if role is admin then set admin true
+    if (role.code === ROLES_TYPES.IS_ADMIN_ROLE_CODE) {
+      userPayload.admin = true;
+    }
+
     //save and return user
     const user = this.userRepository.create(userPayload);
     await this.userRepository.insert(user);

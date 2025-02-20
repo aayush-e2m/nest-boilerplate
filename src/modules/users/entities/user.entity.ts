@@ -3,6 +3,7 @@ import { BaseEntity } from '@/shared/entities/basic.entity';
 import { Exclude } from 'class-transformer';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { AgencyDetails } from './agency-details.entity';
+import { EnumGender } from '@/shared/types/roles.t';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -15,20 +16,8 @@ export class User extends BaseEntity {
   @Column({ length: 50 })
   lastname: string;
 
-  @Column({ nullable: true })
-  facebook?: string;
-
-  @Column({ nullable: true })
-  linkedin?: string;
-
   @Column({ length: 30, nullable: true })
   phonenumber?: string;
-
-  @Column({ length: 191, nullable: true })
-  designation?: string;
-
-  @Column({ length: 50, nullable: true })
-  skype?: string;
 
   @Column({ length: 250, nullable: true })
   @Exclude()
@@ -36,6 +25,12 @@ export class User extends BaseEntity {
 
   @Column({ type: 'text', nullable: true })
   profile_image?: string;
+
+  @Column({ type: 'date', nullable: true })
+  dob?: Date;
+
+  @Column({ type: 'enum', nullable: true, enum: EnumGender })
+  gender?: EnumGender;
 
   @Exclude()
   @Column({ length: 40, nullable: true })
@@ -70,24 +65,6 @@ export class User extends BaseEntity {
   active: boolean;
 
   @Exclude()
-  @Column({ length: 40, nullable: true })
-  default_language?: string;
-
-  @Column({ length: 3, nullable: true })
-  direction?: string;
-
-  @Column({ length: 300, nullable: true })
-  media_path_slug?: string;
-
-  @Exclude()
-  @Column({ type: 'boolean', default: false })
-  is_not_staff: number;
-
-  @Exclude()
-  @Column({ type: 'decimal', precision: 15, scale: 2, default: 0.0 })
-  hourly_rate: number;
-
-  @Exclude()
   @Column({ type: 'boolean', default: false, nullable: true })
   two_factor_auth_enabled?: boolean;
 
@@ -104,17 +81,6 @@ export class User extends BaseEntity {
   email_signature?: string;
 
   @Exclude()
-  @Column({ type: 'boolean', default: true })
-  task_emails: boolean;
-
-  @Exclude()
-  @Column({ type: 'boolean', default: true })
-  task_status_emails: boolean;
-
-  @Column({ type: 'boolean', default: true })
-  project_emails: boolean;
-
-  @Exclude()
   @Column({ type: 'timestamp with time zone', nullable: true })
   email_verified_at?: Date;
 
@@ -126,17 +92,10 @@ export class User extends BaseEntity {
   @Column({ type: 'timestamp with time zone', nullable: true })
   email_verification_sent_at?: Date;
 
-  @Column({ type: 'date', nullable: true })
-  dob?: Date;
-
-  @Column({ length: 100, nullable: true })
-  gender?: string;
-
   @Exclude()
   @Column({ length: 250, nullable: true })
   device_fcm_token?: string;
 
-  @Exclude()
   @Column({ type: 'boolean', default: false })
   is_wfh: boolean;
 
@@ -148,7 +107,6 @@ export class User extends BaseEntity {
   @Column({ type: 'boolean', default: true })
   is_email_send: boolean;
 
-  @Exclude()
   @Column({ type: 'date', nullable: true })
   date_of_joining?: Date;
 

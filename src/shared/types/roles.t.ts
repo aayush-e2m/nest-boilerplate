@@ -12,3 +12,9 @@ export const ROLES_TYPES = {
   IS_BDE_ROLE_CODE: 'bde',
   IS_PROJECT_MANAGER_AI_CODE: 'project_manager_ai',
 };
+
+export enum EnumGender {
+  MALE = 'male',
+  FEMAIL = 'female',
+  OTHER = 'other',
+}
