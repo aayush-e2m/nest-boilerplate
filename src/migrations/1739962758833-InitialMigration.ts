@@ -6,14 +6,14 @@ export class InitialMigration1739962758833 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     for (const role of rolesJSON) {
       await queryRunner.query(
-        `INSERT INTO roles (id, code, name, permissions) VALUES (UUID(), ?, ?, ?)`,
+        `INSERT INTO roles (id, code, name, permissions) VALUES (gen_random_uuid(), $1, $2, $3)`,
         [role.code, role.name, role.permissions],
       );
     }
 
     for (const country of countriesJSON) {
       await queryRunner.query(
-        `INSERT INTO countries (id, name, phonecode, sortname) VALUES (UUID(), ?, ?, ?)`,
+        `INSERT INTO countries (id, name, phonecode, sortname) VALUES (gen_random_uuid(), $1, $2, $3)`,
         [country.name, country.phonecode, country.sortname],
       );
     }

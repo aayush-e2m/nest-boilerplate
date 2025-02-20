@@ -40,19 +40,19 @@ export class User extends BaseEntity {
   @Column({ length: 40, nullable: true })
   last_ip?: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   last_login?: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   last_activity?: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   last_password_change?: Date;
 
   @Column({ length: 32, nullable: true })
   new_pass_key?: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   new_pass_key_requested?: Date;
 
   @Column({ type: 'boolean', default: false })
@@ -82,7 +82,7 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 100, nullable: true })
   two_factor_auth_code?: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   two_factor_auth_code_requested?: Date;
 
   @Column({ type: 'text', nullable: true })
@@ -97,13 +97,13 @@ export class User extends BaseEntity {
   @Column({ type: 'boolean', default: true })
   project_emails: boolean;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'time with time zone', nullable: true })
   email_verified_at?: Date;
 
   @Column({ length: 100, nullable: true })
   email_verification_key?: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'time with time zone', nullable: true })
   email_verification_sent_at?: Date;
 
   @Column({ type: 'date', nullable: true })
