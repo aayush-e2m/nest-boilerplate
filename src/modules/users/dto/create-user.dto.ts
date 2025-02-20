@@ -1,5 +1,15 @@
 import { EnumGender } from '@/shared/types/roles.t';
-import { IsEmail, IsEnum, IsNotEmpty } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsDateString,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -12,6 +22,8 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
+  phonenumber: string;
+
   @IsNotEmpty()
   password: string;
 
@@ -19,34 +31,41 @@ export class CreateUserDto {
   roleId: string;
 
   @IsEnum(EnumGender)
-  gender: string;
+  gender: EnumGender;
 
+  @IsDateString()
+  dob: Date;
+
+  @IsDateString()
+  date_of_joining: Date;
+
+  @IsString()
+  google_drive: string;
+
+  @IsString()
+  calendly_url: string;
+
+  @IsString()
+  agent_profile_preferences: string;
+
+  @IsBoolean()
+  is_wfh: boolean;
+
+  @IsString()
+  email_signature: string;
+
+  @IsBoolean()
+  @IsOptional()
   admin: boolean;
 
-  facebook: string;
-
-  linkedin: string;
-
-  phonenumber: string;
-
-  designation: string;
-
-  skype: string;
+  @IsUUID()
+  @IsOptional()
+  designationId: string;
 
   profile_image: string;
 
-  last_ip: string;
-
-  last_login: Date;
-
-  last_activity: Date;
-
-  last_password_change: Date;
-
-  new_pass_key: string;
-
-  new_pass_key_requested: Date;
-
+  @IsUUID()
+  @IsOptional()
   agencyId: string; //for agent members
 
   agency_name: string; //for agency

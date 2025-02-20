@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { CountriesModule } from './modules/countries/countries.module';
+import { DesignationsModule } from './modules/designations/designations.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { CountriesModule } from './modules/countries/countries.module';
     UsersModule,
     RolesModule,
     CountriesModule,
+    DesignationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

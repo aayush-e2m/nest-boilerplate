@@ -19,6 +19,15 @@ export const ROLES_STRING = {
   },
 };
 
+export const DESIGNATION_STRING = {
+  SUCCESS: {
+    DESIGNATION_CREATED: 'Designation created successfully',
+  },
+  ERROR: {
+    DESIGNATION_NOT_FOUND: 'Designation not found',
+  },
+};
+
 export const COMMON_ERROR_STRING = {
   INTERNAL_SERVER_ERROR: 'Internal server error',
 };

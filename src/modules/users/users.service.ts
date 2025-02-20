@@ -15,6 +15,7 @@ import { USERS_STRING } from '@/shared/utils/string.utils';
 import { instanceToPlain } from 'class-transformer';
 import { ROLES_TYPES } from '@/shared/types/roles.t';
 import { AgencyDetails } from './entities/agency-details.entity';
+import { DesignationsService } from '../designations/designations.service';
 
 @Injectable()
 export class UsersService {
@@ -24,6 +25,7 @@ export class UsersService {
     @InjectRepository(AgencyDetails)
     private readonly agentDetailsRepository: Repository<AgencyDetails>,
     private readonly roleService: RolesService,
+    private readonly designationService: DesignationsService,
   ) {}
 
   async create(createUserDto: CreateUserDto, res: Response) {
@@ -55,7 +57,24 @@ export class UsersService {
       role,
       email_verification_key: verificationCode.replace(/\//g, ''),
       email_verified_at: new Date(),
+      agent_profile_preferences: createUserDto.agent_profile_preferences,
+      calendly_url: createUserDto.calendly_url,
+      date_of_joining: createUserDto.date_of_joining,
+      dob: createUserDto.dob,
+      email_signature: createUserDto.email_signature,
+      google_drive: createUserDto.google_drive,
+      is_wfh: createUserDto.is_wfh,
+      phonenumber: createUserDto.phonenumber,
+      gender: createUserDto.gender,
     };
+
+    //check if designation is provided
+    if (createUserDto.designationId) {
+      const designation = await this.designationService.findOne(
+        createUserDto.designationId,
+      );
+      userPayload.designation = designation;
+    }
 
     //[For Agency] If role type is agency then create agency details
     if (role.code === ROLES_TYPES.IS_AGENCY_OWNER_ROLE_CODE) {

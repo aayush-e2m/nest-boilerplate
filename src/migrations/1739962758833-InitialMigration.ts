@@ -1,4 +1,5 @@
 import countriesJSON from '@/static/counties.json';
+import { designationsJSON } from '@/static/designations.json';
 import rolesJSON from '@/static/roles.json';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
@@ -17,14 +18,26 @@ export class InitialMigration1739962758833 implements MigrationInterface {
         [country.name, country.phonecode, country.sortname],
       );
     }
+
+    for (const designation of designationsJSON) {
+      await queryRunner.query(
+        `INSERT INTO designations (id, name) VALUES (gen_random_uuid(), $1)`,
+        [designation],
+      );
+    }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
       DELETE FROM roles WHERE code IN (${rolesJSON.map((r) => `'${r.code}'`).join(', ')});
     `);
+
     await queryRunner.query(`
       DELETE FROM countries;
+    `);
+
+    await queryRunner.query(`
+      DELETE FROM designations;
     `);
   }
 }

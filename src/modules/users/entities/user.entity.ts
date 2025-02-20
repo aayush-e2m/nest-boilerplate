@@ -4,6 +4,7 @@ import { Exclude } from 'class-transformer';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { AgencyDetails } from './agency-details.entity';
 import { EnumGender } from '@/shared/types/roles.t';
+import { Designation } from '@/modules/designations/entities/designation.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -110,6 +111,15 @@ export class User extends BaseEntity {
   @Column({ type: 'date', nullable: true })
   date_of_joining?: Date;
 
+  @Column({ nullable: true })
+  agent_profile_preferences: string;
+
+  @Column({ nullable: true })
+  calendly_url: string;
+
+  @Column({ nullable: true })
+  google_drive: string;
+
   @ManyToOne(() => Roles, (role) => role.id, { nullable: true })
   @JoinColumn({ name: 'role_id' })
   role?: Roles;
@@ -119,4 +129,10 @@ export class User extends BaseEntity {
   })
   @JoinColumn({ name: 'agency_detail_id' })
   agency_detail?: AgencyDetails;
+
+  @ManyToOne(() => Designation, (designation) => designation.id, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'designation_id' })
+  designation?: Designation;
 }
