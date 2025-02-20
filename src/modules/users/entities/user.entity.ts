@@ -1,6 +1,8 @@
 import { Roles } from '@/modules/roles/entities/role.entity';
 import { BaseEntity } from '@/shared/entities/basic.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import { AgencyDetails } from './agency-details.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -29,12 +31,10 @@ export class User extends BaseEntity {
   skype?: string;
 
   @Column({ length: 250, nullable: true })
+  @Exclude()
   password?: string;
 
-  @Column({ length: 250, nullable: true })
-  password_new?: string;
-
-  @Column({ length: 300, nullable: true })
+  @Column({ type: 'text', nullable: true })
   profile_image?: string;
 
   @Column({ length: 40, nullable: true })
@@ -97,13 +97,13 @@ export class User extends BaseEntity {
   @Column({ type: 'boolean', default: true })
   project_emails: boolean;
 
-  @Column({ type: 'time with time zone', nullable: true })
+  @Column({ type: 'timestamp with time zone', nullable: true })
   email_verified_at?: Date;
 
   @Column({ length: 100, nullable: true })
   email_verification_key?: string;
 
-  @Column({ type: 'time with time zone', nullable: true })
+  @Column({ type: 'timestamp with time zone', nullable: true })
   email_verification_sent_at?: Date;
 
   @Column({ type: 'date', nullable: true })
@@ -115,6 +115,7 @@ export class User extends BaseEntity {
   @Column({ length: 250, nullable: true })
   time_zone?: string;
 
+  @Exclude()
   @Column({ length: 250, nullable: true })
   device_fcm_token?: string;
 
@@ -133,4 +134,10 @@ export class User extends BaseEntity {
   @ManyToOne(() => Roles, (role) => role.id, { nullable: true })
   @JoinColumn({ name: 'role_id' })
   role?: Roles;
+
+  @OneToOne(() => AgencyDetails, (agency_detail) => agency_detail.id, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'agency_detail_id' })
+  agency_detail?: AgencyDetails;
 }

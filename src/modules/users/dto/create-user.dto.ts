@@ -43,5 +43,13 @@ export class CreateUserDto {
 
   new_pass_key_requested: Date;
 
-  active: boolean;
+  agency_name: string;
+
+  country: string;
+
+  state: string;
+
+  city: string;
+
+  zipcode: string;
 }
