@@ -1,7 +1,18 @@
-import { Controller, Post, Req, Res, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Req,
+  Res,
+  Body,
+  Get,
+  UseGuards,
+} from '@nestjs/common';
 import { iLoginPayload } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
+import { successResponseWithData } from '@/shared/utils/reponses.utils';
+import { JwtAuthGuard } from '@/shared/guards/jwt-auth.guard';
+import { instanceToPlain } from 'class-transformer';
 
 @Controller('auth')
 export class AuthController {
@@ -14,6 +25,16 @@ export class AuthController {
     @Res() res: Response,
   ) {
     return await this.authService.staffLogin(req, data, res);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Req() req: Request, @Res() response: Response) {
+    return successResponseWithData(
+      response,
+      'User information fetched.',
+      instanceToPlain(req.user) ?? {},
+    );
   }
 
   // @Post('generate-token')

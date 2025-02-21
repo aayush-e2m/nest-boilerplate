@@ -97,7 +97,7 @@ export class AuthService {
   }
 
   private generateUserToken(user: User) {
-    const payload = { user: instanceToPlain(user) };
+    const payload = { sub: user.id, email: user.email, role: user.role?.code };
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
       expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
