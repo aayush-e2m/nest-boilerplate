@@ -7,10 +7,12 @@ import { AUTH_STRING } from '@/shared/utils/string.utils';
 import { logger } from '@/shared/utils/logger.utils';
 import { instanceToPlain } from 'class-transformer';
 import { iLoginPayload } from './dto/auth.dto';
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { User } from '../users/entities/user.entity';
+import { generateCode } from '@/shared/utils/common.utils';
 
 @Injectable()
 export class AuthService {
@@ -50,18 +52,20 @@ export class AuthService {
 
     //check if user has 2fa enabled
     if (user.two_factor_auth_enabled) {
-      //check if 2fa code is provided
-      if (!data.code && !user.two_factor_auth_code) {
-        return successResponse(res, AUTH_STRING.ERROR.TWO_FA_CODE_REQUIRED);
+      //check if 2fa code is provided and send code to email
+      if (!data.code) {
+        await this.sendTwoFactorAuthCode(user);
+        return successResponse(
+          res,
+          AUTH_STRING.SUCCESS.TWO_FACTOR_AUTH_CODE_SENT,
+        );
       }
 
       //check if 2fa code matches
-      const isCodeMatch = await bcrypt.compare(
-        data.code,
-        user.two_factor_auth_code ?? 'no code',
-      );
-      if (!isCodeMatch) {
-        return successResponse(res, AUTH_STRING.ERROR.INVALID_TWO_FA_CODE);
+      if (data.code) {
+        if (data.code !== user.two_factor_auth_code) {
+          throw new ForbiddenException(AUTH_STRING.ERROR.INVALID_TWO_FA_CODE);
+        }
       }
     }
 
@@ -71,7 +75,24 @@ export class AuthService {
     await user.save();
 
     //generate jwt access and refresh token
-    const payload = { userId: user.id, email: user.email };
+    const { accessToken, refreshToken } = this.generateUserToken(user);
+
+    return successResponseWithData(res, AUTH_STRING.SUCCESS.LOGIN_SUCCESS, {
+      accessToken,
+      refreshToken,
+      user: instanceToPlain(user),
+    });
+  }
+
+  private async sendTwoFactorAuthCode(user: User) {
+    //generate 2fa code
+    const code = generateCode(6);
+    user.two_factor_auth_code = code;
+    await user.save();
+  }
+
+  private generateUserToken(user: User) {
+    const payload = { user: user };
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
       expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
@@ -80,12 +101,9 @@ export class AuthService {
     const refreshToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
       expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+      audience: [user.id, user.role?.code].join(':'),
     });
 
-    return successResponseWithData(res, AUTH_STRING.SUCCESS.LOGIN_SUCCESS, {
-      accessToken,
-      refreshToken,
-      user: instanceToPlain(user),
-    });
+    return { accessToken, refreshToken };
   }
 }

@@ -5,6 +5,9 @@ export const AUTH_STRING = {
     PASSWORD_CHANGED: 'Password changed successfully',
     PASSWORD_RESET: 'Password reset successful',
     PASSWORD_RESET_REQUEST: 'Password reset request successful',
+    TWO_FACTOR_AUTH_CODE_SENT: 'Two factor authentication code sent',
+    TWO_FACTOR_AUTH_ENABLED: 'Two factor authentication enabled',
+    TWO_FACTOR_AUTH_DISABLED: 'Two factor authentication disabled',
   },
   ERROR: {
     INVALID_EMAIL_PASSWORD: 'Invalid email or password',
