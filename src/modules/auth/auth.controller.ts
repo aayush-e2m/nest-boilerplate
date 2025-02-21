@@ -13,6 +13,7 @@ import { Request, Response } from 'express';
 import { successResponseWithData } from '@/shared/utils/reponses.utils';
 import { JwtAuthGuard } from '@/shared/guards/jwt-auth.guard';
 import { instanceToPlain } from 'class-transformer';
+import { USERS_STRING } from '@/shared/utils/string.utils';
 
 @Controller('auth')
 export class AuthController {
@@ -27,12 +28,12 @@ export class AuthController {
     return await this.authService.staffLogin(req, data, res);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('profile')
+  @UseGuards(JwtAuthGuard)
   getProfile(@Req() req: Request, @Res() response: Response) {
     return successResponseWithData(
       response,
-      'User information fetched.',
+      USERS_STRING.SUCCESS.USER_FETCHED,
       instanceToPlain(req.user) ?? {},
     );
   }

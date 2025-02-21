@@ -22,6 +22,7 @@ export const AUTH_STRING = {
 export const USERS_STRING = {
   SUCCESS: {
     USER_CREATED: 'User created successfully',
+    USER_FETCHED: 'User information fetched successfully',
   },
   ERROR: {
     USER_NOT_FOUND: 'User not found',
