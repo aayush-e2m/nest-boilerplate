@@ -13,6 +13,8 @@ export const ROLES_TYPES = {
   IS_PROJECT_MANAGER_AI_CODE: 'project_manager_ai',
 };
 
+export type EnumRoleType = (typeof ROLES_TYPES)[keyof typeof ROLES_TYPES];
+
 export enum EnumGender {
   MALE = 'male',
   FEMAIL = 'female',
