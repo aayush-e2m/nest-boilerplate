@@ -135,4 +135,8 @@ export class UsersService {
       instanceToPlain(user),
     );
   }
+
+  async findOneByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOneBy({ email });
+  }
 }

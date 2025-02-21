@@ -22,7 +22,7 @@ export class User extends BaseEntity {
 
   @Column({ length: 250, nullable: true })
   @Exclude()
-  password?: string;
+  password: string;
 
   @Column({ type: 'text', nullable: true })
   profile_image?: string;

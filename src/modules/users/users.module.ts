@@ -15,5 +15,6 @@ import { DesignationsModule } from '../designations/designations.module';
   ],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

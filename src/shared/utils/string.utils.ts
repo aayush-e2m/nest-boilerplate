@@ -1,3 +1,19 @@
+export const AUTH_STRING = {
+  SUCCESS: {
+    LOGIN_SUCCESS: 'Login successful',
+    LOGOUT_SUCCESS: 'Logout successful',
+    PASSWORD_CHANGED: 'Password changed successfully',
+    PASSWORD_RESET: 'Password reset successful',
+    PASSWORD_RESET_REQUEST: 'Password reset request successful',
+  },
+  ERROR: {
+    INVALID_EMAIL_PASSWORD: 'Invalid email or password',
+    LOGIN_VERIFICATION_REMAIN: 'Login verification remain',
+    TWO_FA_CODE_REQUIRED: 'Two factor authentication code required',
+    INVALID_TWO_FA_CODE: 'Invalid two factor authentication code',
+  },
+};
+
 export const USERS_STRING = {
   SUCCESS: {
     USER_CREATED: 'User created successfully',

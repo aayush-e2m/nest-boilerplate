@@ -1,39 +1,19 @@
-import {
-  Controller,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-  Body,
-  Headers,
-} from '@nestjs/common';
-// import { AuthService } from '../../services/authenticate';
-// import { ApiResponse } from '../../helpers/ApiResponses';
-// import { ValidateRequestSchema } from '../../helpers/ValidateRequestSchema';
-// import { LoginValidation } from '../../validation/loginValidator';
-// import { TwoFactorValidation } from '../../validation/twoFactorValidator';
-// import { AuthenticateJWT } from '../../middleware/authenticateJWT';
-// import { GeneralHelper } from '../../helpers/general';
-import { Request, Response } from 'express';
+import { Controller, Post, Req, Res, Body } from '@nestjs/common';
+import { iLoginPayload } from './dto/auth.dto';
 import { AuthService } from './auth.service';
-import { LoginValidation } from './dto/auth.dto';
-import { ErrorResponse } from '@utils/reponses.utils';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() data: LoginValidation, @Res() res: Response) {
-    try {
-      const staffLogin = await this.authService.staffLogin(data);
-
-      if (!staffLogin) {
-        await this.authService.clientLogin(data, res);
-      }
-    } catch (ex) {
-      return ErrorResponse(res, { msg: ex });
-    }
+  async login(
+    @Body() data: iLoginPayload,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    return await this.authService.staffLogin(req, data, res);
   }
 
   // @Post('generate-token')
