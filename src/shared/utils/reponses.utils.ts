@@ -9,6 +9,14 @@ export const successResponse = function (res: Response, msg: string) {
   return res.send(data);
 };
 
+export const acceptedResponse = function (res: Response, msg: string) {
+  const data = {
+    status: 1,
+    message: msg,
+  };
+  return res.status(202).send(data);
+};
+
 export const successResponseWithData = function (
   res: Response,
   msg: string,

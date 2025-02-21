@@ -71,7 +71,7 @@ export class User extends BaseEntity {
 
   @Exclude()
   @Column({ type: 'varchar', length: 100, nullable: true })
-  two_factor_auth_code?: string;
+  two_factor_auth_code?: string | null;
 
   @Exclude()
   @Column({ type: 'timestamptz', nullable: true })

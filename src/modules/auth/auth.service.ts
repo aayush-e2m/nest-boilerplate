@@ -1,5 +1,5 @@
 import {
-  successResponse,
+  acceptedResponse,
   successResponseWithData,
 } from '@/shared/utils/reponses.utils';
 import { UsersService } from '../users/users.service';
@@ -25,7 +25,7 @@ export class AuthService {
     //find user by email
     const user = await this.usersService.findOneByEmail(data.email);
     if (!user) {
-      return successResponse(res, AUTH_STRING.ERROR.INVALID_EMAIL_PASSWORD);
+      throw new ForbiddenException(AUTH_STRING.ERROR.INVALID_EMAIL_PASSWORD);
     }
 
     //check if user is active
@@ -33,7 +33,7 @@ export class AuthService {
       logger.info(
         `Inactive User Tried to Login [Email:${data.email}, Is Staff Member: yes, IP: ${req.socket.remoteAddress}]`,
       );
-      return successResponse(res, AUTH_STRING.ERROR.INVALID_EMAIL_PASSWORD);
+      throw new ForbiddenException(AUTH_STRING.ERROR.INVALID_EMAIL_PASSWORD);
     }
 
     //check user verified his email or not
@@ -41,13 +41,13 @@ export class AuthService {
       logger.info(
         `Login Verification Remain [Email:${data.email}, Is Staff Member: yes, IP: ${req.socket.remoteAddress}]`,
       );
-      return successResponse(res, AUTH_STRING.ERROR.LOGIN_VERIFICATION_REMAIN);
+      throw new ForbiddenException(AUTH_STRING.ERROR.LOGIN_VERIFICATION_REMAIN);
     }
 
     //check if password matches
     const isPasswordMatch = await bcrypt.compare(data.password, user.password);
     if (!isPasswordMatch) {
-      return successResponse(res, AUTH_STRING.ERROR.INVALID_EMAIL_PASSWORD);
+      throw new ForbiddenException(AUTH_STRING.ERROR.INVALID_EMAIL_PASSWORD);
     }
 
     //check if user has 2fa enabled
@@ -55,18 +55,23 @@ export class AuthService {
       //check if 2fa code is provided and send code to email
       if (!data.code) {
         await this.sendTwoFactorAuthCode(user);
-        return successResponse(
+        return acceptedResponse(
           res,
           AUTH_STRING.SUCCESS.TWO_FACTOR_AUTH_CODE_SENT,
         );
       }
 
       //check if 2fa code matches
-      if (data.code) {
+      if (data.code && user.two_factor_auth_code) {
         if (data.code !== user.two_factor_auth_code) {
           throw new ForbiddenException(AUTH_STRING.ERROR.INVALID_TWO_FA_CODE);
         }
+      } else {
+        throw new ForbiddenException(AUTH_STRING.ERROR.INVALID_TWO_FA_CODE);
       }
+
+      //clear 2fa code after successful login
+      user.two_factor_auth_code = null;
     }
 
     //update user last login and last ip
