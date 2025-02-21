@@ -120,7 +120,7 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   google_drive: string;
 
-  @ManyToOne(() => Roles, (role) => role.id, { nullable: true })
+  @ManyToOne(() => Roles, (role) => role.id, { nullable: true, eager: true })
   @JoinColumn({ name: 'role_id' })
   role?: Roles;
 

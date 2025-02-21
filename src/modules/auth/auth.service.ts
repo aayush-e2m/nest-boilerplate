@@ -92,17 +92,20 @@ export class AuthService {
   }
 
   private generateUserToken(user: User) {
-    const payload = { user: user };
+    const payload = { user: instanceToPlain(user) };
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
       expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
     });
 
-    const refreshToken = this.jwtService.sign(payload, {
-      secret: process.env.JWT_SECRET,
-      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
-      audience: [user.id, user.role?.code].join(':'),
-    });
+    const refreshToken = this.jwtService.sign(
+      {},
+      {
+        secret: process.env.JWT_SECRET,
+        expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+        audience: [user.id, user.role?.code].join(':'),
+      },
+    );
 
     return { accessToken, refreshToken };
   }
